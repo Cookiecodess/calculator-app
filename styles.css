@@ -1,0 +1,142 @@
+/* CSS Resets */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+}
+
+/* Images should never be wider or taller than their containers by default */
+img,
+picture {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Inherit fonts for inputs and buttons */
+input, button,
+textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+
+/* Main CSS */
+@font-face {
+  font-family: "SFUIText";
+  src: url("assets/SFUIText-RegularG3.otf");
+}    
+
+:root {
+    --grid-cell-height: 2.25em;
+    --color-btn-equal: #ee7c30;
+    --color-btn-number: #e0d9c9;
+    --color-btn-others: #752d0a;
+
+    /* --color-btn-hover-equal: hsl(from var(--color-btn-equal) h s calc(l+20%)); */
+    --color-btn-hover-equal: color-mix(in srgb, var(--color-btn-equal) 80%, white);
+    --color-btn-hover-number: color-mix(in srgb, var(--color-btn-number) 80%, black);
+    --color-btn-hover-others: color-mix(in srgb, var(--color-btn-others) 80%, white);
+
+    --color-btn-active-equal: color-mix(in srgb, var(--color-btn-equal) 60%, white);
+    --color-btn-active-number: color-mix(in srgb, var(--color-btn-number) 60%, black);
+    --color-btn-active-others: color-mix(in srgb, var(--color-btn-others) 60%, white);
+
+    --operator-btn-bg-color: var(--color-btn-others);
+    --operator-btn-fg-color: #fff;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+}
+
+.calculator {
+    font-size: 40px;
+    font-family: "SFUIText", 'Courier New', Courier, monospace;
+    width: fit-content;
+    margin: 40px auto 0;
+}
+
+.button-grid {
+    display: grid;
+    grid-template: 1fr repeat(5, var(--grid-cell-height)) / repeat(4, var(--grid-cell-height));
+    grid-gap: 0.5em;
+}
+
+.btn {
+    border-radius: calc(var(--grid-cell-height) * 0.5);
+    background-color: var(--color-btn-others);
+    color: #fff;
+    transition: all 0.1s;
+}
+#zero {
+    grid-column: 1 / 3;
+    text-align: left;
+    padding-left: calc(1em * 0.8);
+}
+#equal {
+    background-color: var(--color-btn-equal);
+    color: #fff;
+}
+.number {
+    background-color: var(--color-btn-number);
+    color: #000;
+}
+
+.btn:hover {
+    /* background-color: hsl(from currentcolor h s calc(l + 20%)); */
+    background-color: var(--color-btn-hover-others);
+    /* opacity: 0.75; */
+}
+#equal:hover {
+    background-color: var(--color-btn-hover-equal);
+}
+.number:hover {
+    background-color: var(--color-btn-hover-number);
+}
+
+.btn:active {
+    transition: none;
+    background-color: var(--color-btn-active-others);
+}
+#equal:active {
+    background-color: var(--color-btn-active-equal);
+}
+.number:active {
+    background-color: var(--color-btn-active-number);
+}
+
+.operator.selected {
+    /* flip background and foreground colors */
+    background-color: var(--operator-btn-fg-color);
+    color: var(--operator-btn-bg-color);
+}
+
+#calculator-display {
+    text-align: right;
+    font-size: 2em;
+    grid-column: 1 / 5;
+    overflow-x: auto;
+}
+
