@@ -4,8 +4,20 @@ let lastNumberString = "0";
 // let currentNumber = accumulator;
 let currentOperator = null;
 
+const CalcState = {
+    INITIAL: 'INITIAL',
+    HAS_FIRST_OPERAND: 'HAS_FIRST_OPERAND',
+    OPERATOR_SET: 'OPERATOR_SET',
+    HAS_SECOND_OPERAND: 'HAS_SECOND_OPERAND',
+    RESULT: 'RESULT',
+};
+let calcState = CalcState.INITIAL;
+
+const allButtons = document.querySelectorAll(".btn");
 const operatorBtnArray = document.querySelectorAll(".operator");
 const numberBtnArray = document.querySelectorAll(".number");
+const percentBtn = document.getElementById("percent-btn");
+const clearOrAllClearBtn = document.getElementById("clear-or-all-clear-btn");
 const equalBtn = document.getElementById("equal-btn");
 const calculatorDisplay = document.getElementById("calculator-display");
 
@@ -13,6 +25,14 @@ function typeNumber(char) {
     // prevent multiple dots
     if (currentNumberString.includes('.') && char === '.') {
         return
+    }
+
+    if (calcState === CalcState.INITIAL) {
+        calcState = CalcState.HAS_FIRST_OPERAND;
+    } else if (calcState === CalcState.OPERATOR_SET) {
+        calcState = CalcState.HAS_SECOND_OPERAND;
+    } else if (calcState === CalcState.RESULT) {
+        calcState = CalcState.HAS_FIRST_OPERAND;
     }
 
     if (currentNumberString === "0" && char !== '.') {
@@ -23,6 +43,13 @@ function typeNumber(char) {
     }
 
     calculatorDisplay.innerText = currentNumberString;
+
+    if (calcState === CalcState.INITIAL) {
+        // at initial state, accumulator is null
+        // so we set accumulator to the current number string
+        // parsed as float.
+        accumulator = parseFloat(currentNumberString);
+    }
 }
 
 function add(numString) {
@@ -45,8 +72,9 @@ function divide(numString) {
 //     return num1 ** num2;
 // }
 
-function perCent() {
-    accumulator /= 100;
+function calcPercent() {
+    accumulator = currentNumberString = parseFloat(currentNumberString) / 100;
+    calculatorDisplay.innerText = accumulator;
 }
 
 function flipSign() {
@@ -62,11 +90,13 @@ const operatorFuncObj = {
 
 function clear() {
     currentNumberString = "0";
+    calculatorDisplay.innerText = "0";
 }
 
 function allClear() {
     accumulator = 0;
     currentOperator = null;
+    calculatorDisplay.innerText = "0";
 }
 
 
@@ -81,7 +111,7 @@ function calculate() {
 
     const operation = operatorFuncObj[currentOperator];
     operation(
-        currentNumberString === "0" 
+        currentNumberString === "0" // bug here
             ? lastNumberString 
             : currentNumberString
     );
@@ -121,12 +151,40 @@ function clearOperator() {
     currentOperator = null;
 }
 
+function deselectAllOperators() {
+    operatorBtnArray.forEach((btn) => {
+        btn.classList.remove("selected");
+    });
+}
+
+function getCurrentOperatorButtonEl() {
+    let toReturn;
+    operatorBtnArray.forEach((btn) => {
+        if (btn.id === currentOperator) {
+            toReturn = btn;
+            return;
+        } 
+    });
+    return toReturn;
+}
 // function updateDisplayScreen() {
 //     calculatorDisplay.innerText = accumulator;
 // }
 
 
 operatorBtnArray.forEach((btn) => btn.addEventListener("click", (e) => {
+    
+    const operation = e.target.id;
+
+    if (calcState === CalcState.HAS_SECOND_OPERAND) {
+        // calculate
+        calculate();
+
+        // set new operator
+        currentOperator = operation;
+
+    }
+
     if (!accumulator) {
         accumulator = parseFloat(currentNumberString);
         currentNumberString = "0";
@@ -134,7 +192,9 @@ operatorBtnArray.forEach((btn) => btn.addEventListener("click", (e) => {
         currentNumberString = "0";
     }
 
-    setOperator(e.target.id);
+    setOperator(operation);
+
+    calcState = CalcState.OPERATOR_SET;
 
 
     
@@ -159,9 +219,52 @@ operatorBtnArray.forEach((btn) => btn.addEventListener("click", (e) => {
 numberBtnArray.forEach((btn) => btn.addEventListener("click", (e) => {
     const numberChar = e.target.innerText;
     typeNumber(numberChar);
+
+    if (numberChar !== "0") clearOrAllClearBtn.innerText = "C";
 }))
 
 equalBtn.addEventListener("click", (e) => {
     calculate();
     clearOperator();
+    calcState = CalcState.RESULT;
 })
+
+clearOrAllClearBtn.addEventListener("click", (e) => {
+    switch (calcState) {
+        case CalcState.RESULT:
+            accumulator = 0;
+            calcState = CalcState.OPERATOR_SET;
+    }
+    if (clearOrAllClearBtn.innerText === "C") {
+        currentNumberString = "0";
+        calculatorDisplay.innerText = "0";
+
+        calcState = CalcState.OPERATOR_SET;
+        clearOrAllClearBtn.innerText = "AC";
+    } else {
+        accumulator = 0;
+        currentOperator = null;
+
+        calculatorDisplay.innerText = "0";
+        deselectAllOperators();
+
+        calcState = CalcState.INITIAL;
+    }
+})
+
+percentBtn.addEventListener("click", (e) => {
+    calcPercent();
+});
+
+// UI updater
+// runs after all other individual-button event listeners have run
+allButtons.forEach((btn) => btn.addEventListener("click", (e) => {
+    if (calcState === CalcState.OPERATOR_SET) {
+        setOperator(currentOperator);
+    } else if (calcState === CalcState.HAS_SECOND_OPERAND) {
+        const currentOperatorButtonEl = getCurrentOperatorButtonEl();
+        currentOperatorButtonEl.classList.remove("selected");
+    }
+
+    console.log(calcState)
+}));

@@ -138,5 +138,6 @@ body {
     font-size: 2em;
     grid-column: 1 / 5;
     overflow-x: auto;
+    position: relative;
 }
 
