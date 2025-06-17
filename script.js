@@ -149,6 +149,9 @@ function setOperator(operationName) {
     currentOperator = operationName;
 }
 
+/**
+ * Visually deselect all operators AND set currentOperator to null
+ */ 
 function clearOperator() {
     operatorBtnArray.forEach((btn) => {
         btn.classList.remove("selected");
@@ -157,6 +160,9 @@ function clearOperator() {
     currentOperator = null;
 }
 
+/**
+ * Visually deselect all operators.
+ */
 function deselectAllOperators() {
     operatorBtnArray.forEach((btn) => {
         btn.classList.remove("selected");
@@ -168,7 +174,7 @@ function getCurrentOperatorButtonEl() {
     operatorBtnArray.forEach((btn) => {
         if (btn.id === currentOperator) {
             toReturn = btn;
-            return;
+            return; // reminder: this returns out of the anonymous callback function, not the outer function.
         } 
     });
     return toReturn;
@@ -240,7 +246,7 @@ equalBtn.addEventListener("click", (e) => {
     } 
 
     calculate();
-    clearOperator();
+    clearOperator(); 
     calcState = CalcState.RESULT;
 })
 

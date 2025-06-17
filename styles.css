@@ -95,7 +95,7 @@ body {
     text-align: left;
     padding-left: calc(1em * 0.8);
 }
-#equal {
+#equal-btn {
     background-color: var(--color-btn-equal);
     color: #fff;
 }
@@ -109,7 +109,7 @@ body {
     background-color: var(--color-btn-hover-others);
     /* opacity: 0.75; */
 }
-#equal:hover {
+#equal-btn:hover {
     background-color: var(--color-btn-hover-equal);
 }
 .number:hover {
@@ -120,7 +120,7 @@ body {
     transition: none;
     background-color: var(--color-btn-active-others);
 }
-#equal:active {
+#equal-btn:active {
     background-color: var(--color-btn-active-equal);
 }
 .number:active {
