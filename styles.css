@@ -69,11 +69,22 @@ textarea:not([rows]) {
 body {
     background-color: #000;
     color: #fff;
+    font-family: "SFUIText", 'Courier New', Courier, monospace;
+}
+
+code {
+    border: 1px solid #fff8;
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+p:not(:last-of-type) {
+    margin-bottom: 0.5em;
 }
 
 .calculator {
     font-size: 40px;
-    font-family: "SFUIText", 'Courier New', Courier, monospace;
     width: fit-content;
     margin: 40px auto 0;
 }
@@ -140,4 +151,30 @@ body {
     overflow-x: auto;
     position: relative;
 }
+
+.notice {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    padding-bottom: 1em;
+    padding-right: 3em; /* just so theres space for the cursor to move without breaking the hover state */
+}
+.notice-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 300px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #b16a00;
+    color: #eee;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    display: none;
+}
+.notice:hover > .notice-content, 
+.notice-content:hover {
+    display: block;
+}
+
 

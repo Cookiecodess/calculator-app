@@ -332,4 +332,7 @@ document.addEventListener("keydown", (e) => {
     if (parseFloat(key) || key === '.') {
         typeNumber(key);
     }
+    // else if (key === "Backspace") {
+    //     currentNumberString = currentNumberString.slice(0, -1); // remove last number
+    // }
 })
