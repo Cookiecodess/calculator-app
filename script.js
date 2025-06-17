@@ -236,14 +236,38 @@ numberBtnArray.forEach((btn) => btn.addEventListener("click", (e) => {
 }))
 
 equalBtn.addEventListener("click", (e) => {
-    if (calcState !== CalcState.HAS_SECOND_OPERAND) {
-        // if equal button is pressed when there's
-        // no second operand, repeat last operation
+    if (calcState !== CalcState.HAS_SECOND_OPERAND && calcState !== CalcState.OPERATOR_SET /* this second condition is important. see the next IF block for more details */) {
+        // if equal button is pressed when there
+        // isn't a second operand OR an operator set, 
+        // repeat the last operation
         const operation = operatorFuncObj[lastOperator];
         operation(lastNumberString);
         calculatorDisplay.innerText = accumulator;
         return;
     } 
+    if (calcState === CalcState.OPERATOR_SET) {
+        // if the equal button is pressed
+        // when an operator is set,
+        // the iOS 17 Calculator app's behavior
+        // in tihs situation is followed:
+        // take the accumulator and carry out the
+        // latest specified operation ON ITSELF.
+        //
+        // I'm aware that this behavior may not be
+        // a deliberate intent on the Apple developer's
+        // part, but rather a byproduct of their existing
+        // code, since I suppose this order of pressing 
+        // buttons ('=' right after an operator) doesn't 
+        // really count as a main or essential
+        // use case -- most users that do this probably do it 
+        // accidentally. At the time of writing this, I honestly
+        // don't have my own opinion about what behavior
+        // is most reasonable in this scenario, and
+        // since this project is modeled after the iOS
+        // calculator anyway, I decided to just follow
+        // its behavior.
+        currentNumberString = String(accumulator);
+    }
 
     calculate();
     clearOperator(); 
@@ -290,4 +314,5 @@ allButtons.forEach((btn) => btn.addEventListener("click", (e) => {
     }
 
     console.log(calcState)
+    console.log(currentOperator)
 }));
