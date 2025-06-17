@@ -3,6 +3,7 @@ let currentNumberString = "0";
 let lastNumberString = "0";
 // let currentNumber = accumulator;
 let currentOperator = null;
+let lastOperator = null;
 
 const CalcState = {
     INITIAL: 'INITIAL',
@@ -33,6 +34,7 @@ function typeNumber(char) {
         calcState = CalcState.HAS_SECOND_OPERAND;
     } else if (calcState === CalcState.RESULT) {
         calcState = CalcState.HAS_FIRST_OPERAND;
+        accumulator = 0 // if type number at RESULT state (after pressing equal), reset accumulator
     }
 
     if (currentNumberString === "0" && char !== '.') {
@@ -109,6 +111,8 @@ function calculate() {
         return;
     } 
 
+    
+
     const operation = operatorFuncObj[currentOperator];
     operation(
         currentNumberString === "0" // bug here
@@ -118,7 +122,9 @@ function calculate() {
     calculatorDisplay.innerText = accumulator;
 
     lastNumberString = currentNumberString;
+    lastOperator = currentOperator;
     currentNumberString = "0";
+    currentOperator = null;
     
 }
 
@@ -224,6 +230,15 @@ numberBtnArray.forEach((btn) => btn.addEventListener("click", (e) => {
 }))
 
 equalBtn.addEventListener("click", (e) => {
+    if (calcState !== CalcState.HAS_SECOND_OPERAND) {
+        // if equal button is pressed when there's
+        // no second operand, repeat last operation
+        const operation = operatorFuncObj[lastOperator];
+        operation(lastNumberString);
+        calculatorDisplay.innerText = accumulator;
+        return;
+    } 
+
     calculate();
     clearOperator();
     calcState = CalcState.RESULT;
@@ -264,6 +279,8 @@ allButtons.forEach((btn) => btn.addEventListener("click", (e) => {
     } else if (calcState === CalcState.HAS_SECOND_OPERAND) {
         const currentOperatorButtonEl = getCurrentOperatorButtonEl();
         currentOperatorButtonEl.classList.remove("selected");
+    } else if (calcState === CalcState.RESULT) {
+        deselectAllOperators();
     }
 
     console.log(calcState)
