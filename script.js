@@ -281,14 +281,20 @@ clearOrAllClearBtn.addEventListener("click", (e) => {
             calcState = CalcState.OPERATOR_SET;
     }
     if (clearOrAllClearBtn.innerText === "C") {
+        // clear
+
         currentNumberString = "0";
         calculatorDisplay.innerText = "0";
 
         calcState = CalcState.OPERATOR_SET;
         clearOrAllClearBtn.innerText = "AC";
     } else {
+        // all clear
+
         accumulator = 0;
         currentOperator = null;
+        lastOperator = null;
+        lastNumberString = "0";
 
         calculatorDisplay.innerText = "0";
         deselectAllOperators();
