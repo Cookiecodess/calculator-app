@@ -18,6 +18,7 @@ const allButtons = document.querySelectorAll(".btn");
 const operatorBtnArray = document.querySelectorAll(".operator");
 const numberBtnArray = document.querySelectorAll(".number");
 const percentBtn = document.getElementById("percent-btn");
+const flipSignBtn = document.getElementById("flip-sign-btn");
 const clearOrAllClearBtn = document.getElementById("clear-or-all-clear-btn");
 const equalBtn = document.getElementById("equal-btn");
 const calculatorDisplay = document.getElementById("calculator-display");
@@ -46,10 +47,9 @@ function typeNumber(char) {
 
     calculatorDisplay.innerText = currentNumberString;
 
-    if (calcState === CalcState.INITIAL) {
-        // at initial state, accumulator is null
-        // so we set accumulator to the current number string
-        // parsed as float.
+    if (calcState === CalcState.HAS_FIRST_OPERAND) {
+        // for first operand, the number being types
+        // becomes the accumulator immediately
         accumulator = parseFloat(currentNumberString);
     }
 }
@@ -81,6 +81,7 @@ function calcPercent() {
 
 function flipSign() {
     accumulator *= -1;
+    calculatorDisplay.innerText = accumulator;
 }
 
 const operatorFuncObj = {
@@ -272,7 +273,7 @@ equalBtn.addEventListener("click", (e) => {
     calculate();
     clearOperator(); 
     calcState = CalcState.RESULT;
-})
+}) 
 
 clearOrAllClearBtn.addEventListener("click", (e) => {
     switch (calcState) {
@@ -307,6 +308,8 @@ percentBtn.addEventListener("click", (e) => {
     calcPercent();
 });
 
+flipSignBtn.addEventListener("click", flipSign);
+
 // UI updater
 // runs after all other individual-button event listeners have run
 allButtons.forEach((btn) => btn.addEventListener("click", (e) => {
@@ -322,3 +325,11 @@ allButtons.forEach((btn) => btn.addEventListener("click", (e) => {
     console.log(calcState)
     console.log(currentOperator)
 }));
+
+// Read keyboard inputs
+document.addEventListener("keydown", (e) => {
+    const key = e.key;
+    if (parseFloat(key) || key === '.') {
+        typeNumber(key);
+    }
+})
