@@ -54,9 +54,9 @@ textarea:not([rows]) {
     --color-btn-others: #752d0a;
 
     /* --color-btn-hover-equal: hsl(from var(--color-btn-equal) h s calc(l+20%)); */
-    --color-btn-hover-equal: color-mix(in srgb, var(--color-btn-equal) 80%, white);
-    --color-btn-hover-number: color-mix(in srgb, var(--color-btn-number) 80%, black);
-    --color-btn-hover-others: color-mix(in srgb, var(--color-btn-others) 80%, white);
+    --color-btn-hover-equal: color-mix(in srgb, var(--color-btn-equal) 70%, white);
+    --color-btn-hover-number: color-mix(in srgb, var(--color-btn-number) 70%, black);
+    --color-btn-hover-others: color-mix(in srgb, var(--color-btn-others) 70%, white);
 
     --color-btn-active-equal: color-mix(in srgb, var(--color-btn-equal) 60%, white);
     --color-btn-active-number: color-mix(in srgb, var(--color-btn-number) 60%, black);
@@ -69,7 +69,7 @@ textarea:not([rows]) {
 body {
     background-color: #000;
     color: #fff;
-    font-family: "SFUIText", 'Courier New', Courier, monospace;
+    font-family: "SFUIText", BlinkMacSystemFont, system-ui, sans-serif;
 }
 
 code {
@@ -99,7 +99,7 @@ p:not(:last-of-type) {
     border-radius: calc(var(--grid-cell-height) * 0.5);
     background-color: var(--color-btn-others);
     color: #fff;
-    transition: all 0.7s;
+    transition: all 0.3s;
 }
 #zero {
     grid-column: 1 / 3;
@@ -172,6 +172,7 @@ p:not(:last-of-type) {
     border-radius: 20px;
     background-color: #0047b1;
     color: #eee;
+    box-shadow: 0 0 40px -2px black;
     overflow-wrap: break-word;
     hyphens: auto;
     display: none;
@@ -183,6 +184,10 @@ p:not(:last-of-type) {
 
 @media (pointer: coarse) {
     /* For touchscreen devices */
+
+    .btn {
+        transition: all 0.7s;
+    }
 
     /* No hover effects for buttons */
     .btn:hover {
