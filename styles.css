@@ -185,6 +185,7 @@ p:not(:last-of-type) {
 @media (pointer: coarse) {
     /* For touchscreen devices */
 
+    /* Longer transition time to achieve iOS-like style */
     .btn {
         transition: all 0.7s;
     }
